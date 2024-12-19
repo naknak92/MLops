@@ -50,9 +50,12 @@ jobs:
       env:
         SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
       run: |
-        ssh -o StrictHostKeyChecking=no -i "${{ secrets.SSH_PRIVATE_KEY }}" ubuntu@34.170.123.233 << 'EOF'
+        echo "${{ secrets.SSH_PRIVATE_KEY }}" > ssh_key
+        chmod 600 ssh_key
+        ssh -o StrictHostKeyChecking=no -i ssh_key ubuntu@34.170.123.233 << 'EOF'
         docker pull ${{ secrets.DOCKER_USERNAME }}/ml-api:latest
         docker stop ml-api-container || true
         docker rm ml-api-container || true
         docker run -d --name ml-api-container -p 5001:5000 ${{ secrets.DOCKER_USERNAME }}/ml-api:latest
         EOF
+        rm ssh_key
