@@ -55,7 +55,7 @@ jobs:
         chmod 600 ssh_key  # Définir les bonnes permissions pour la clé privée
 
         # Exécuter la commande SSH
-        ssh -o StrictHostKeyChecking=no -i ssh_key ubuntu@34.170.123.233 << 'EOF'
+        ssh -o StrictHostKeyChecking=no -i ssh_key rafael@34.170.123.233 << 'EOF'
         docker pull ${{ secrets.DOCKER_USERNAME }}/ml-api:latest
         docker stop ml-api-container || true
         docker rm ml-api-container || true
