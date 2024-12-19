@@ -1,6 +1,6 @@
 import unittest
 from unittest.mock import patch
-from api.main import app  # Modifier le chemin
+from api.main import app  # Assurez-vous que le chemin vers app est correct
 
 class TestAPI(unittest.TestCase):
 
@@ -13,6 +13,7 @@ class TestAPI(unittest.TestCase):
             response = client.post("/predict", json={"features": [5.1, 3.5, 1.4, 0.2]})
             data = response.get_json()
 
+            # Assurer que le statut de la réponse est 200
             self.assertEqual(response.status_code, 200)
             self.assertEqual(data["prediction"], [0])
 
