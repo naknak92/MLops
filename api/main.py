@@ -5,7 +5,7 @@ from flask import Flask, request, jsonify
 app = Flask(__name__)
 
 # Configuration du serveur de tracking MLflow
-mlflow.set_tracking_uri("http://35.188.13.90:5000")  # Remplace avec l'IP de ton serveur MLflow
+mlflow.set_tracking_uri("http://34.170.123.233:5000")  # Remplace avec l'IP de ton serveur MLflow
 
 # Charger le modèle MLflow depuis le Model Registry
 MODEL_URI = "models:/iris_model/1"

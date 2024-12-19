@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 
 def train_and_log_model():
     # Configuration MLflow
-    mlflow.set_tracking_uri("http://35.188.13.90:5000")
+    mlflow.set_tracking_uri("http://34.170.123.233:5000")
     mlflow.set_experiment("iris_experiment")
     client = mlflow.tracking.MlflowClient()
 

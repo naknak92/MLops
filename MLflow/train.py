@@ -5,7 +5,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 
 # Connexion au serveur MLflow
-mlflow.set_tracking_uri("http://35.188.13.90:5000")  # Remplace par ton IP
+mlflow.set_tracking_uri("http://34.170.123.233:5000")  # Remplace par ton IP
 mlflow.set_experiment("iris_experiment")
 
 # Charger les données
