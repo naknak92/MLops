@@ -28,7 +28,7 @@ jobs:
     # 4. Entraîner et logger le modèle
     - name: Train and log model
       run: |
-        python MLflow/train_and_log_model.py
+        python MLflow/pipeline.py
 
     # 5. Construire l'image Docker
     - name: Build Docker image
