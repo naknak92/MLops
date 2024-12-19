@@ -1,0 +1,59 @@
+name: MLOps Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  train-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    # 1. Vérifier le code source
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    # 2. Configurer Python
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.9"
+
+    # 3. Installer les dépendances
+    - name: Install dependencies
+      run: |
+        pip install -r api/requirements.txt
+
+    # 4. Entraîner et logger le modèle
+    - name: Train and log model
+      run: |
+        python train_and_log_model.py
+
+    # 5. Construire une nouvelle image Docker
+    - name: Build Docker image
+      run: |
+        docker build -t ml-api .
+
+    # 6. Pousser l'image Docker vers un registre (DockerHub, AWS ECR, etc.)
+    - name: Push Docker image to DockerHub
+      env:
+        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      run: |
+        echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+        docker tag ml-api:latest <DOCKER_REGISTRY_USERNAME>/ml-api:latest
+        docker push <DOCKER_REGISTRY_USERNAME>/ml-api:latest
+
+    # 7. Déployer l'image sur l'instance
+    - name: Deploy to instance
+      env:
+        SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+      run: |
+        ssh -o StrictHostKeyChecking=no -i "${{ secrets.SSH_PRIVATE_KEY }}" <USERNAME>@<INSTANCE_IP> << 'EOF'
+        docker pull <DOCKER_REGISTRY_USERNAME>/ml-api:latest
+        docker stop ml-api-container || true
+        docker rm ml-api-container || true
+        docker run -d --name ml-api-container -p 5001:5000 <DOCKER_REGISTRY_USERNAME>/ml-api:latest
+        EOF
+
