@@ -34,6 +34,7 @@ jobs:
     # 5. Exécuter les tests unitaires
     - name: Run tests
       run: |
+        export PYTHONPATH=$PYTHONPATH:$(pwd)/MLflow  # Ajout explicite de PYTHONPATH
         pytest test/pipeline_test.py --maxfail=1 --disable-warnings -q
         pytest test/main_test.py --maxfail=1 --disable-warnings -q
 
