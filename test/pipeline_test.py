@@ -1,7 +1,8 @@
 import unittest
 from unittest.mock import patch
 import mlflow
-from MLflow.pipeline import train_and_log_model  # Modifier le chemin
+from MLflow.pipeline import train_and_log_model
+  
 
 class TestModelTraining(unittest.TestCase):
 

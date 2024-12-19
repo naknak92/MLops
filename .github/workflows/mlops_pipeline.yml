@@ -26,23 +26,28 @@ jobs:
         pip install --no-cache-dir -r api/requirements.txt
         pip install --no-cache-dir pytest
 
-    # 4. Exécuter les tests unitaires
+    # 4. Configurer le PYTHONPATH
+    - name: Set PYTHONPATH
+      run: |
+        echo "export PYTHONPATH=$PYTHONPATH:$(pwd)/MLflow" >> $GITHUB_ENV
+
+    # 5. Exécuter les tests unitaires
     - name: Run tests
       run: |
         pytest test/pipeline_test.py --maxfail=1 --disable-warnings -q
         pytest test/main_test.py --maxfail=1 --disable-warnings -q
 
-    # 5. Entraîner et logger le modèle
+    # 6. Entraîner et logger le modèle
     - name: Train and log model
       run: |
         python MLflow/pipeline.py
 
-    # 6. Construire l'image Docker
+    # 7. Construire l'image Docker
     - name: Build Docker image
       run: |
         docker build -t ml-api .
 
-    # 7. Pousser l'image Docker sur DockerHub
+    # 8. Pousser l'image Docker sur DockerHub
     - name: Push Docker image to DockerHub
       env:
         DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
@@ -52,7 +57,7 @@ jobs:
         docker tag ml-api:latest ${{ secrets.DOCKER_USERNAME }}/ml-api:latest
         docker push ${{ secrets.DOCKER_USERNAME }}/ml-api:latest
 
-    # 8. Déployer l'image sur l'instance GCP
+    # 9. Déployer l'image sur l'instance GCP
     - name: Deploy Docker image to GCP instance
       env:
         SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
