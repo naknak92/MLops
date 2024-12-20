@@ -1,10 +1,10 @@
 import unittest
 from unittest.mock import patch
-from api.main import app  # Assurez-vous que le chemin vers app est correct
+from api.main import app  #  le chemin vers app 
 
 class TestAPI(unittest.TestCase):
 
-    @patch("api.main.model.predict")  # Modifier le chemin
+    @patch("api.main.model.predict")  
     def test_predict(self, mock_predict):
         # Mock la prédiction du modèle
         mock_predict.return_value = [0]  # Simuler une prédiction
